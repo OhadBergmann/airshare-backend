@@ -55,7 +55,7 @@ async function getByUsername(username) {
     console.log("🚀 ~ file: user.service.js:55 ~ getByUsername ~ username", username)
     try {
         const collection = await dbService.getCollection('user')
-        const user = await collection.findOne({ "fullname":username })
+        const user = await collection.findOne({ username })
         return user
     } catch (err) {
         logger.error(`while finding user by username: ${username}`, err)
