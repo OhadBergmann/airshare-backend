@@ -5,9 +5,8 @@ const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy={txt:''}) {
     try {
-        const criteria = {
-            // vendor: { $regex: filterBy.txt, $options: 'i' }
-        }
+        const criteria = _buildCriteria(filterBy)
+        
         const collection = await dbService.getCollection('stay')
         var stays = await collection.find(criteria).toArray()
         return stays
@@ -86,6 +85,15 @@ async function removeStayMsg(stayId, msgId) {
         logger.error(`cannot add stay msg ${stayId}`, err)
         throw err
     }
+}
+function _buildCriteria(filterBy) {
+
+    const criteria = {}
+    if(filterBy.byUserId){
+        criteria['host.id'] = filterBy.byUserId
+    }
+    
+    return criteria
 }
 
 module.exports = {
