@@ -9,8 +9,9 @@ async function getStays(req, res) {
   try {
     logger.debug('Getting stays')
     const filterBy = {
-      // txt: req.query.txt || ''
+      byUserId: req.query.byUserId || ''
     }
+    console.log("🚀 ~ file: stay.controller.js:14 ~ getStays ~ filterBy", filterBy)
     const stays = await stayService.query(filterBy)
     res.json(stays)
   } catch (err) {

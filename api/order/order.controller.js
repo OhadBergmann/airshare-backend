@@ -7,10 +7,13 @@ const logger = require('../../services/logger.service')
 
 async function getOrders(req, res) {
   try {
+    console.log('HELLOOOO')
     logger.debug('Getting orders')
     const filterBy = {
-      txt: req.query.txt || ''
+      hostId: req.query.hostId || ''
     }
+    console.log(filterBy)
+
     const orders = await orderService.query(filterBy)
     res.json(orders)
   } catch (err) {
@@ -47,7 +50,9 @@ async function addOrder(req, res) {
 
 async function updateOrder(req, res) {
   try {
+    console.log(req.body)
     const order = req.body
+    console.log("🚀 ~ file: order.controller.js:52 ~ updateOrder ~ order", order)
     const updatedOrder = await orderService.update(order)
     res.json(updatedOrder)
   } catch (err) {
