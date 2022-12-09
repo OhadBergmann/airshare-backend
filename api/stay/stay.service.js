@@ -6,7 +6,7 @@ const ObjectId = require('mongodb').ObjectId
 async function query(filterBy={txt:''}) {
     try {
         const criteria = _buildCriteria(filterBy)
-        
+        console.log('IM CRITRATYTY',criteria)
         const collection = await dbService.getCollection('stay')
         var stays = await collection.find(criteria).toArray()
         return stays
@@ -87,12 +87,21 @@ async function removeStayMsg(stayId, msgId) {
     }
 }
 function _buildCriteria(filterBy) {
-
+    console.log("🚀 ~ file: stay.service.js:91 ~ _buildCriteria ~ filterBy", filterBy.propertyType)
     const criteria = {}
     if(filterBy.byUserId){
         criteria['host.id'] = filterBy.byUserId
     }
-    
+   if(filterBy.price)criteria['price'] = { $gte: +filterBy.price[0], $lte: +filterBy.price[1] }
+   if(filterBy.bedrooms)criteria['bedrooms'] = +filterBy.bedrooms
+   if(filterBy.beds)criteria['beds'] =  +filterBy.beds
+   if(filterBy.type)criteria['type'] =  { $in: filterBy.type }
+   if(filterBy.amenities)criteria['amenities'] =  { $in: filterBy.amenities.amenitieType }
+   if(filterBy[0])criteria['loc.country'] =  { $regex: filterBy[0], $options: 'i' }
+   //    if(filterBy[0])criteria['loc.city'] =  { $regex: filterBy[0], $options: 'i' }
+//    if(filterBy[0])criteria['type'] =  { $regex: filterBy[0], $options: 'i' }
+        
+    console.log(criteria)
     return criteria
 }
 
