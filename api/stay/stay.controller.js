@@ -7,12 +7,15 @@ const logger = require('../../services/logger.service')
 
 async function getStays(req, res) {
   try {
-    logger.debug('Getting stays')
-    const filterBy = {
-      byUserId: req.query.byUserId || ''
+    // logger.debug('Getting stays')
+    console.log('IM HERE',req.query)
+    var queryParams = req.query
+   if(req.query.byUserId){
+    queryParams.byUserId = req.query.byUserId || ''
     }
-    console.log("🚀 ~ file: stay.controller.js:14 ~ getStays ~ filterBy", filterBy)
-    const stays = await stayService.query(filterBy)
+    
+    console.log("🚀 ~ file: stay.controller.js:14 ~ getStays ~ filterBy", queryParams)
+    const stays = await stayService.query(queryParams)
     res.json(stays)
   } catch (err) {
     logger.error('Failed to get stays', err)
