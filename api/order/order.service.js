@@ -3,12 +3,11 @@ const logger = require('../../services/logger.service')
 const utilService = require('../../services/util.service')
 const ObjectId = require('mongodb').ObjectId
 
-async function query(filterBy) {
+async function query(filterBy={userId :''}) {
     try {
-        const criteria = _buildCriteria(filterBy)
-        console.log('hayyya',criteria)
-            // vendor: { $regex: filterBy.txt, $options: 'i' }
-        console.log('HELLOOOOO')
+        const criteria = {
+            byUserId : userId
+        }
         const collection = await dbService.getCollection('order')
         var orders = await collection.find(criteria).toArray()
         return orders
@@ -88,16 +87,6 @@ async function removeOrderMsg(orderId, msgId) {
         throw err
     }
 }
-function _buildCriteria(filterBy) {
-
-    const criteria = {}
-    if(filterBy.hostId){
-        criteria['host.id'] = filterBy.hostId
-    }
-    
-    return criteria
-}
-
 
 module.exports = {
     remove,
