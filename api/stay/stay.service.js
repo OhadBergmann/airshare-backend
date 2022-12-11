@@ -87,18 +87,39 @@ async function removeStayMsg(stayId, msgId) {
     }
 }
 function _buildCriteria(filterBy) {
-    console.log("🚀 ~ file: stay.service.js:91 ~ _buildCriteria ~ filterBy", filterBy.propertyType)
+    console.log("🚀 ~ file: stay.service.js:91 ~ _buildCriteria ~ filterBy", filterBy.beds)
     const criteria = {}
     if(filterBy.byUserId){
         criteria['host.id'] = filterBy.byUserId
     }
    if(filterBy.price)criteria['price'] = { $gte: +filterBy.price[0], $lte: +filterBy.price[1] }
-   if(filterBy.bedrooms)criteria['bedrooms'] = +filterBy.bedrooms
-   if(filterBy.beds)criteria['beds'] =  +filterBy.beds
+   if(filterBy.bedrooms){
+    criteria['bedrooms'] = {$gte: +filterBy.bedrooms}
+}
+   if(filterBy.beds){
+    console.log('HERE IS BEDS', filterBy.beds);
+        criteria['beds'] =  {$gte: +filterBy.beds}
+   }
+
    if(filterBy.type)criteria['type'] =  { $in: filterBy.type }
-   if(filterBy.amenities)criteria['amenities'] =  { $in: filterBy.amenities.amenitieType }
-   if(filterBy[0])criteria['loc.country'] =  { $regex: filterBy[0], $options: 'i' }
-   //    if(filterBy[0])criteria['loc.city'] =  { $regex: filterBy[0], $options: 'i' }
+   if(filterBy.amenities)criteria['amenities.amenitieType'] =  { $in: filterBy.amenities }
+   if(filterBy[0]){
+    const regex = { $regex: filterBy[0], $options: 'i' }
+    criteria.$or =[
+        {
+            'loc.city': regex
+        },
+        {
+            'loc.country': regex
+        },
+        {
+            'type':regex
+        }
+    ]
+    // criteria['loc.country'] =  { $regex: filterBy[0], $options: 'i' }
+    //    if(filterBy[0])criteria['loc.city'] =  { $regex: filterBy[0], $options: 'i' }
+}
+
 //    if(filterBy[0])criteria['type'] =  { $regex: filterBy[0], $options: 'i' }
         
     console.log(criteria)
