@@ -7,7 +7,9 @@ const logger = require('../../services/logger.service')
 
 async function getUser(req, res) {
     try {
+        console.log("🚀 ~ file: user.controller.js:11 ~ getUser ~ req", req.params.id)
         const user = await userService.getById(req.params.id)
+
         res.send(user)
     } catch (err) {
         logger.error('Failed to get user', err)

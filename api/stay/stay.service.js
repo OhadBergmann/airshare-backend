@@ -87,17 +87,16 @@ async function removeStayMsg(stayId, msgId) {
     }
 }
 function _buildCriteria(filterBy) {
-    console.log("🚀 ~ file: stay.service.js:91 ~ _buildCriteria ~ filterBy", filterBy.beds)
+    console.log("🚀 ~ file: stay.service.js:91 ~ _buildCriteria ~ filterBy", filterBy)
     const criteria = {}
     if(filterBy.byUserId){
-        criteria['host.id'] = filterBy.byUserId
+        criteria['host._id'] = filterBy.byUserId
     }
    if(filterBy.price)criteria['price'] = { $gte: +filterBy.price[0], $lte: +filterBy.price[1] }
    if(filterBy.bedrooms){
     criteria['bedrooms'] = {$gte: +filterBy.bedrooms}
 }
    if(filterBy.beds){
-    console.log('HERE IS BEDS', filterBy.beds);
         criteria['beds'] =  {$gte: +filterBy.beds}
    }
 
@@ -116,12 +115,7 @@ function _buildCriteria(filterBy) {
             'type':regex
         }
     ]
-    // criteria['loc.country'] =  { $regex: filterBy[0], $options: 'i' }
-    //    if(filterBy[0])criteria['loc.city'] =  { $regex: filterBy[0], $options: 'i' }
-}
-
-//    if(filterBy[0])criteria['type'] =  { $regex: filterBy[0], $options: 'i' }
-        
+}  
     console.log(criteria)
     return criteria
 }

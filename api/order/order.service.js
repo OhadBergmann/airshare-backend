@@ -3,7 +3,8 @@ const logger = require('../../services/logger.service')
 const utilService = require('../../services/util.service')
 const ObjectId = require('mongodb').ObjectId
 
-async function query(filterBy={userId :''}) {
+async function query(filterBy) {
+    console.log("🚀 ~ file: order.service.js:7 ~ query ~ filterBy", filterBy)
     try {
         const criteria = {
             byUserId : userId
@@ -52,10 +53,9 @@ async function add(order) {
 
 async function update(order) {
     try {
-        const orderToSave = {
-            vendor: order.vendor,
-            price: order.price
-        }
+        const orderToSave = JSON.parse(JSON.stringify(order))
+           delete orderToSave._id
+        
         const collection = await dbService.getCollection('order')
         await collection.updateOne({ _id: ObjectId(order._id) }, { $set: orderToSave })
         return order
@@ -87,6 +87,19 @@ async function removeOrderMsg(orderId, msgId) {
         throw err
     }
 }
+function _buildCriteria(filterBy) {
+
+    const criteria = {}
+    if(filterBy.hostId){
+        criteria['host.id'] = filterBy.hostId
+    }
+    if(filterBy.buyerId){
+        criteria['buyer._id'] = filterBy.buyerId
+    }
+    
+    return criteria
+}
+
 
 module.exports = {
     remove,

@@ -10,7 +10,8 @@ async function getOrders(req, res) {
     console.log('HELLOOOO')
     logger.debug('Getting orders')
     const filterBy = {
-      hostId: req.query.hostId || ''
+      hostId: req.query.hostId || '',
+      buyerId: req.query.buyerId || ''
     }
     console.log(filterBy)
 
@@ -50,9 +51,9 @@ async function addOrder(req, res) {
 
 async function updateOrder(req, res) {
   try {
-    console.log(req.body)
+    // console.log(req.body)
     const order = req.body
-    console.log("🚀 ~ file: order.controller.js:52 ~ updateOrder ~ order", order)
+    // console.log("🚀 ~ file: order.controller.js:52 ~ updateOrder ~ order", order)
     const updatedOrder = await orderService.update(order)
     res.json(updatedOrder)
   } catch (err) {
