@@ -102,8 +102,13 @@ function _buildCriteria(filterBy) {
 
    if(filterBy.type)criteria['type'] =  { $in: filterBy.type }
    if(filterBy.amenities)criteria['amenities.amenitieType'] =  { $in: filterBy.amenities }
-   if(filterBy[0]){
-    const regex = { $regex: filterBy[0], $options: 'i' }
+   if(filterBy[0])criteria['type'] =  { $regex: filterBy[0], $options: 'i' }
+
+   if(filterBy.where){
+    console.log("🚀 ~ file: stay.service.js:120 ~ _buildCriteria ~ filterBy.where", filterBy.where)
+    const regex = { $regex: filterBy.where, $options: 'i' }
+
+    console.log("🚀 ~ file: stay.service.js:108 ~ _buildCriteria ~ regex", regex)
     criteria.$or =[
         {
             'loc.city': regex
@@ -111,11 +116,10 @@ function _buildCriteria(filterBy) {
         {
             'loc.country': regex
         },
-        {
-            'type':regex
-        }
+        
     ]
 }  
+    
     console.log(criteria)
     return criteria
 }
