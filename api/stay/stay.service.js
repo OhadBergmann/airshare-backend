@@ -3,10 +3,9 @@ const logger = require('../../services/logger.service')
 const utilService = require('../../services/util.service')
 const ObjectId = require('mongodb').ObjectId
 
-async function query(filterBy={txt:''}) {
+async function query(filterBy = { txt: '' }) {
     try {
         const criteria = _buildCriteria(filterBy)
-        console.log('IM CRITRATYTY',criteria)
         const collection = await dbService.getCollection('stay')
         var stays = await collection.find(criteria).toArray()
         return stays
@@ -79,7 +78,7 @@ async function addStayMsg(stayId, msg) {
 async function removeStayMsg(stayId, msgId) {
     try {
         const collection = await dbService.getCollection('stay')
-        await collection.updateOne({ _id: ObjectId(stayId) }, { $pull: { msgs: {id: msgId} } })
+        await collection.updateOne({ _id: ObjectId(stayId) }, { $pull: { msgs: { id: msgId } } })
         return msgId
     } catch (err) {
         logger.error(`cannot add stay msg ${stayId}`, err)
@@ -87,40 +86,36 @@ async function removeStayMsg(stayId, msgId) {
     }
 }
 function _buildCriteria(filterBy) {
-    console.log("🚀 ~ file: stay.service.js:91 ~ _buildCriteria ~ filterBy", filterBy)
     const criteria = {}
-    if(filterBy.byUserId){
+    if (filterBy.byUserId) {
         criteria['host._id'] = filterBy.byUserId
     }
-   if(filterBy.price)criteria['price'] = { $gte: +filterBy.price[0], $lte: +filterBy.price[1] }
-   if(filterBy.bedrooms){
-    criteria['bedrooms'] = {$gte: +filterBy.bedrooms}
-}
-   if(filterBy.beds){
-        criteria['beds'] =  {$gte: +filterBy.beds}
-   }
+    if (filterBy.price) criteria['price'] = { $gte: +filterBy.price[0], $lte: +filterBy.price[1] }
+    if (filterBy.bedrooms) {
+        criteria['bedrooms'] = { $gte: +filterBy.bedrooms }
+    }
+    if (filterBy.beds) {
+        criteria['beds'] = { $gte: +filterBy.beds }
+    }
 
-   if(filterBy.type)criteria['type'] =  { $in: filterBy.type }
-   if(filterBy.amenities)criteria['amenities.amenitieType'] =  { $in: filterBy.amenities }
-   if(filterBy[0])criteria['type'] =  { $regex: filterBy[0], $options: 'i' }
+    if (filterBy.type) criteria['type'] = { $in: filterBy.type }
 
-   if(filterBy.where){
-    console.log("🚀 ~ file: stay.service.js:120 ~ _buildCriteria ~ filterBy.where", filterBy.where)
-    const regex = { $regex: filterBy.where, $options: 'i' }
+    if (filterBy.amenities) criteria['amenities.amenitieType'] = { $in: filterBy.amenities }
 
-    console.log("🚀 ~ file: stay.service.js:108 ~ _buildCriteria ~ regex", regex)
-    criteria.$or =[
-        {
-            'loc.city': regex
-        },
-        {
-            'loc.country': regex
-        },
-        
-    ]
-}  
-    
-    console.log(criteria)
+    if (filterBy[0]) criteria['type'] = { $regex: filterBy[0], $options: 'i' }
+
+    if (filterBy.where) {
+        const regex = { $regex: filterBy.where, $options: 'i' }
+        criteria.$or = [
+            {
+                'loc.city': regex
+            },
+            {
+                'loc.country': regex
+            },
+
+        ]
+    }
     return criteria
 }
 
