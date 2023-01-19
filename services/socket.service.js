@@ -14,9 +14,11 @@ function setupSocketAPI(http) {
             logger.info(`Socket disconnected [id: ${socket.id}]`)
         })
         socket.on('status changed', orderId => {
-            console.log("🚀 ~ file: socket.service.js:17 ~ setupSocketAPI ~ orderId", orderId)
             broadcast({ type: 'update trips', data: orderId, userId: socket.id })
         })
+        // socket.on('new order', orderId => {
+        //     broadcast({ type: 'update trips', data: orderId, userId: socket.id })
+        // })
         socket.on('chat-set-topic', topic => {
             if (socket.myTopic === topic) return
             if (socket.myTopic) {

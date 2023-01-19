@@ -6,11 +6,21 @@ const ObjectId = require('mongodb').ObjectId
 async function query(filterBy) {
     console.log("🚀 ~ file: order.service.js:7 ~ query ~ filterBy", filterBy)
     try {
+        let userId
+    // if(filterBy.hostId){
+    //     userId = filterBy.hostId
+    // }
+    // if(filterBy.buyerId){
+    //     userId = filterBy.buyerId
+    // }
         const criteria = {
-            byUserId : userId
+            byUserId : userId,
         }
+        console.log("🚀 ~ file: order.service.js:19 ~ query ~ userId", userId)
+            console.log("🚀 ~ file: order.service.js:19 ~ query ~ criteria", criteria)
         const collection = await dbService.getCollection('order')
         var orders = await collection.find(criteria).toArray()
+        // console.log("🚀 ~ file: order.service.js:21 ~ query ~ orders", orders)
         return orders
     } catch (err) {
         logger.error('cannot find orders', err)

@@ -87,17 +87,14 @@ async function removeStayMsg(stayId, msgId) {
 }
 function _buildCriteria(filterBy) {
     const criteria = {}
-    if (filterBy.byUserId) {
-        criteria['host._id'] = filterBy.byUserId
-    }
+    if (filterBy.byUserId) criteria['host._id'] = filterBy.byUserId 
+    
     if (filterBy.price) criteria['price'] = { $gte: +filterBy.price[0], $lte: +filterBy.price[1] }
-    if (filterBy.bedrooms) {
-        criteria['bedrooms'] = { $gte: +filterBy.bedrooms }
-    }
-    if (filterBy.beds) {
-        criteria['beds'] = { $gte: +filterBy.beds }
-    }
 
+    if (filterBy.bedrooms) criteria['bedrooms'] = { $gte: +filterBy.bedrooms }
+
+    if (filterBy.beds) criteria['beds'] = { $gte: +filterBy.beds }
+    
     if (filterBy.type) criteria['type'] = { $in: filterBy.type }
 
     if (filterBy.amenities) criteria['amenities.amenitieType'] = { $in: filterBy.amenities }
